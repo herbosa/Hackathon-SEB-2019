@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import sys, os
+from VectorMaker import *
 
 class Email:
     """Email is ..."""
@@ -35,6 +36,8 @@ class Email:
     X_FOLDER = 12
     X_ORIGIN = 13
     X_FILENAME = 14
+
+    vectorMaker = VectorMaker()
 
     def __init__(self, email_string: str) :
         """Initialize the email from string."""
@@ -87,9 +90,18 @@ class Email:
         print("X_FILENAME:", self.xfilename)
         print("CONTENT:", self.content)
 
+    def toMatrix(self) :
+        sub = self.vectorMaker.VectorFromChars(self.subject, 100, 1).tolist()
+        mat = self.vectorMaker.VectorFromChars(self.content, 1000, 10).tolist()
+        mat.append(sub[0])
+        final_mat = np.array(mat)
+        return (final_mat)
+
 if __name__ == '__main__' :
     f = open("../data/email_example")
     email_example = f.read()
 
     mail = Email(email_example)
-    mail.display()
+    #mail.display()
+    matrix = mail.toMatrix()
+    print(matrix)

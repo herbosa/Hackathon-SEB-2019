@@ -49,6 +49,6 @@ class VectorMaker :
 
 if __name__ == '__main__' :
     vect = VectorMaker()
-    mat = vect.VectorFromChars("abcdefghi", 12, 3)
+    mat = vect.VectorFromChars("abcdefghi123456789", 12, 3)
     print(mat)
 
