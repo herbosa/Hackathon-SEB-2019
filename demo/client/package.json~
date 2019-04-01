@@ -1,9 +1,0 @@
-{
-  "name": "demo-Liam",
-  "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {}
-}
