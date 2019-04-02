@@ -22,13 +22,13 @@ const Home = () => (
     <NavBar/>
     <TextInput/>
     <Grid columns={5} centered>
-      <Grid.Column width={3}>
+      <Grid.Column width={4}>
       <iframe src="https://calendar.google.com/calendar/b/2/embed?showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;src=alexandre.vokil%40gmail.com&amp;color=%231B887A&amp;ctz=Europe%2FParis" style={{borderWidth:0}} width="100%" height="600"  scrolling="no"></iframe>      </Grid.Column>
       <Grid.Column width={1}/>
-      <Grid.Column width={3}>
+      <Grid.Column width={4}>
       <iframe src="https://calendar.google.com/calendar/b/1/embed?showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=tristan.stavislas%40gmail.com&amp;color=%231B887A&amp;ctz=Europe%2FParis" style={{borderWidth:0}} width="100%" height="600" scrolling="no"></iframe>      </Grid.Column>
       <Grid.Column width={1}/>
-      <Grid.Column width={3}>
+      <Grid.Column width={4}>
       <iframe src="https://calendar.google.com/calendar/b/3/embed?showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=delarteroger%40gmail.com&amp;color=%231B887A&amp;ctz=Europe%2FParis" style={{borderWidth:0}} width="100%" height="600" scrolling="no"></iframe>
       </Grid.Column>
     </Grid>
