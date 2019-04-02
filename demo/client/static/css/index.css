@@ -11,36 +11,36 @@ h3, h2, h1 {
 }
 
 textarea::-webkit-input-placeholder {
-    color: #E66249 !important;
+    color: #F5A623 !important;
 }
      
 textarea:-moz-placeholder { /* Firefox 18- */
-    color: #E66249 !important;  
+    color: #F5A623 !important;  
 }
      
 textarea::-moz-placeholder {  /* Firefox 19+ */
-    color: #E66249 !important;  
+    color: #F5A623 !important;  
 }
      
 textarea:-ms-input-placeholder {  
-    color: #E66249 !important;  
+    color: #F5A623 !important;  
 }
 
 
 input::-webkit-input-placeholder {
-    color: #E66249 !important;
+    color: #F5A623 !important;
 }
      
 input:-moz-placeholder { /* Firefox 18- */
-    color: #E66249 !important;  
+    color: #F5A623 !important;  
 }
      
 input::-moz-placeholder {  /* Firefox 19+ */
-    color: #E66249 !important;  
+    color: #F5A623 !important;  
 }
      
 input:-ms-input-placeholder {  
-    color: #E66249 !important;
+    color: #F5A623 !important;
 }
 .colors
 {
@@ -48,4 +48,8 @@ input:-ms-input-placeholder {
     orange: #E66249;
     jaune: #F5A623;
     blanc: #C1C1C1;
+}
+
+.ui.orange.button, .ui.orange.buttons .button {
+    background-color: #F5A623 !important;
 }
