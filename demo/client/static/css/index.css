@@ -1,7 +1,51 @@
 body {
-    background-color: #EEE7DF !important;
+    background-color: #1D80DD !important;
+}
+
+h3, h2, h1 {
+    color: #FFFFFF !important;
 }
 
 .background {
-    background-color: #EEE7DF !important;
+    background-color: #1D80DD !important;
+}
+
+textarea::-webkit-input-placeholder {
+    color: #E66249 !important;
+}
+     
+textarea:-moz-placeholder { /* Firefox 18- */
+    color: #E66249 !important;  
+}
+     
+textarea::-moz-placeholder {  /* Firefox 19+ */
+    color: #E66249 !important;  
+}
+     
+textarea:-ms-input-placeholder {  
+    color: #E66249 !important;  
+}
+
+
+input::-webkit-input-placeholder {
+    color: #E66249 !important;
+}
+     
+input:-moz-placeholder { /* Firefox 18- */
+    color: #E66249 !important;  
+}
+     
+input::-moz-placeholder {  /* Firefox 19+ */
+    color: #E66249 !important;  
+}
+     
+input:-ms-input-placeholder {  
+    color: #E66249 !important;
+}
+.colors
+{
+    bleu: #1D80DD;
+    orange: #E66249;
+    jaune: #F5A623;
+    blanc: #C1C1C1;
 }

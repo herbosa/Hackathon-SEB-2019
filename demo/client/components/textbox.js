@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Checkbox, Form, Input, Radio, Select, TextArea, Grid, GridColumn, Header, Divider } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Input, Radio, Select, Image, TextArea, Grid, GridColumn, Header, Divider } from 'semantic-ui-react'
 import '../static/css/index.css'
 
 class TextInput extends Component {
@@ -22,7 +22,18 @@ class TextInput extends Component {
                 <Form onSubmit={this.submitMail}>
                     <Form.Input placeholder='Object' name='object' value={object} onChange={this.handleChange} />
                     <Form.Field control={TextArea} placeholder='Email'  style={{ minHeight: 200 }} name='text' value={text} onChange={this.handleChange}/>
-                    <Form.Button color="blue" control={Button}>Submit</Form.Button>
+                    <Form.Button color="orange" control={Button} animated style={{height: 70, width: 130}}>
+                        <Button.Content visible>
+                            <Header as="h3">
+                                Submit
+                            </Header>
+                        </Button.Content>
+                        <Button.Content hidden>
+                        <Grid centered>
+                            <Image src="/static/images/brain.svg" size="tiny"  />
+                        </Grid>
+                        </Button.Content>
+                </Form.Button>
                 </Form>
                 </Grid.Column>
         </Grid>
