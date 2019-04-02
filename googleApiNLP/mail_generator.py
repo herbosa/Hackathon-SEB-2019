@@ -13,6 +13,7 @@ I organized a meeting for the project ErasmaShit the 7 March at 6 a.m, are you a
 """
 
 import random as rand;
+import sys
 
 TASKS_TYPE = {
     "Backend": [
@@ -147,7 +148,11 @@ class MailGenerator(object):
         return sentences
 
 if __name__ == "__main__":
-    mail_generator = MailGenerator(100000)
-    lol = mail_generator.generate()
-    for elem in lol:
+    try:
+        nb_mail: int = int(sys.argv[1])
+    except Exception:
+        nb_mail: int = 1000
+    mail_generator = MailGenerator(nb_mail)
+    mails = mail_generator.generate()
+    for elem in mails:
         print(elem)
