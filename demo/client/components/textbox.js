@@ -12,11 +12,8 @@ class TextInput extends Component {
         const { text, object, from } = this.state
         
 
-        var config = {
-            headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}
-        };
 
-        axios.get('http://localhost:8080/distribute/' + text + "", config)
+        fetch('http://localhost:8080/distribute/' + text + "/")
         .then(response => {
             console.log(response)
           })
