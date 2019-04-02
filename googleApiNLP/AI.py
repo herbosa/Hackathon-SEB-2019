@@ -24,7 +24,7 @@ class AI :
         mat = vect.VectorFromChars(content, 600, 1)
         pred = self.model.predict(np.array([mat]))
         arg = np.argmax(pred[0])
-        print(TASKS[arg - 1])
+        print(content, '=', TASKS[arg - 1])
         return (TASKS[arg - 1])
 
 
