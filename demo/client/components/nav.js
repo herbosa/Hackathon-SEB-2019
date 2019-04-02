@@ -6,6 +6,7 @@ export default class NavBar extends Component {
   render() {
     return (
       <div>
+        <Divider hidden></Divider>
           <Grid columns={1} textAlign="center">
             <Image size="small" src="/static/images/logo.png"></Image>
           </Grid>
