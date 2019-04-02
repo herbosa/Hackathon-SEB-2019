@@ -11,8 +11,17 @@ class TextInput extends Component {
     submitMail = () => {
         const { text, object, from } = this.state
         
-        axios.get('http://localhost:8080/distribut?mail=' + text + '&object=' + object, {
-        })
+
+        var config = {
+            headers: {'Access-Control-Allow-Origin': 'http://localhost:8080',}
+        };
+
+        axios.get('http://localhost:8080/distribute/' + text + "", config)
+        .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+          })
         console.log(object, text, from);
     }
 
