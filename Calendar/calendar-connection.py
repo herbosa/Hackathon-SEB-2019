@@ -47,7 +47,9 @@ class Event:
         self.time = time
         self.task = task
         self.duration = duration
+        self.isBlocking = False
         if task:
+            self.isBlocking = True
             self.duration = task.description.time
 
     def __str__(self):
@@ -69,36 +71,37 @@ class WorkingDay:
 
     def add_event(self, event: Event) -> bool:
         size = len(self.events) - 1
-        time = self.start
 
+        self.events.sort(key=lambda x: x.start)
         if size <= 0:
             self.events.append(event)
-            self.events.append(Event(event.start + event.duration, event.time,
-                None, event.duration))
+        print(event)
         for i in range(size):
-            if (event.start == time and self.events[i].task == None):
-                self.events[i] = event
-                return True
-            elif (event.start > time and event.start < self.events[i + 1].start):
+            if (event.start >= (self.events[i].start + self.events[i].duration)
+                    and event.start < self.events[i + 1].start):
                 self.events.insert(i + 1, event)
-                self.events.insert(i + 2, Event(event.start + event.duration, event.time, 
-                    None, event.duration))
                 return True
-            time = self.events[i].start
+        if (event.start >= (self.events[-1].start + self.events[-1].duration)
+                and event.start < self.end):
+            self.events.insert(i + 1, event)
+            return True
         return False
 
     def check_duration_availability(self, duration: int) -> int:
-        size = len(self.events)
-        time = self.start
+        size = len(self.events) - 1
 
-        if size == 0 and time - self.end != 0:
+        self.events.sort(key=lambda x: x.start)
+        if size < 0 and self.end - self.start > 0:
             return (self.start)
+        if size == 0 and self.end - self.events[0].start > 0:
+            return (self.events[0].start + self.events[0].duration)
         for i in range(size):
-            if (abs(time - self.events[i].start) > duration):
-                return time + (i * 60)
-            time = self.events[i].start
-        if (time - self.end > duration):
-            return time
+            print(self.events[i].start, self.events[i + 1].start)
+            if (abs(self.events[i].start + self.events[i].duration
+                - self.events[i + 1].start) > duration):
+                return self.events[i].start + self.events[i].duration
+        if (abs((self.events[-1].start + self.events[-1].duration) - self.end) > duration):
+            return self.events[-1].start + self.events[-1].duration
         return 0
 
     def __repr__(self):
@@ -109,11 +112,31 @@ class WorkingDay:
         return (string)
 
 
+def init_mail_service(name):
+    """ Init calendar with credentials """
+    creds = None
+
+    if os.path.exists('%s.pickle' % (name)):
+        with open('%s.pickle' % (name), 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                'credentials.json', SCOPES)
+            creds = flow.run_local_server()
+        with open('%s.pickle' % (name), 'wb') as token:
+            pickle.dump(creds, token)
+    return (build('calendar', 'v3', credentials=creds))
+
+
 class Employee:
     def __init__(self, email: str, skills: [str]):
         self.email = email
         self.skills = skills
         self.days: [WorkingDay] = []
+        self.service = init_mail_service(email)
         for i in range(len(DAYS_SHORT_ID)):
             self.days.append(WorkingDay(NOW.day + i, NOW.month, NOW.year))
 
@@ -150,7 +173,6 @@ class Employee:
             return False
         priority = self._create_priority(task.preferences)
         for pos in priority:
-            print("")
             if pos < len(self.days):
                 time = self.days[pos].check_duration_availability(task.description.time)
                 if time:
@@ -163,31 +185,14 @@ class Company:
         self.name = name
         self.employees = employees
 
-def init_mail_service():
-    """ Init calendar with credentials """
-    creds = None
-
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server()
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    return (build('calendar', 'v3', credentials=creds))
-
 
 def get_event(service, date: str):
     """ Fetch current event in Google's Calendar """
     date_events = []
 
+    new_date = datetime.strptime(date[:-16] + "00:00:00", "%Y-%m-%dT%H:%M:%S")
     events_result = service.events().list(calendarId='primary',
-            timeMin=date, maxResults=10, singleEvents=True,
+            timeMin=new_date.isoformat() + 'Z', maxResults=10, singleEvents=True,
             orderBy='startTime').execute()
     events = events_result.get('items', [])
 
@@ -199,47 +204,50 @@ def get_event(service, date: str):
         end_datetime = datetime.strptime(end_string[:-6], "%Y-%m-%dT%H:%M:%S")
 
         diff = end_datetime - start_datetime
-
-        date_events.append(Event(start_datetime.hour * 60 + start_datetime.minute,
-            start_datetime, None, diff.total_seconds() / 60))
+        event = Event(start_datetime.hour * 60 + start_datetime.minute,
+            start_datetime, None, diff.total_seconds() / 60)
+        event.isBlocking = True
+        date_events.append(event)
     return (date_events)
 
 def create_event(service, event: Event):
-    print(datetime(event.time.year, event.time.month, event.time.day,
-                    int(event.start / 60), event.start % 60, 0).isoformat())
     json_event = {
             'summary': event.task.description.name,
             'start': {
                 'dateTime': datetime(event.time.year, event.time.month, event.time.day,
-                    int(event.start / 60), event.start % 60, 0).isoformat() + "+02:00",
+                    int(event.start / 60), int(event.start % 60), 0).isoformat() + "+02:00",
             },
             'end': {
                 'dateTime': datetime(event.time.year, event.time.month, event.time.day,
                     int((event.start + event.duration) / 60),
-                    (event.start + event.duration) % 60, 0).isoformat() + "+02:00",
+                    int((event.start + event.duration) % 60), 0).isoformat() + "+02:00",
             },
     }
-    service.events().insert(calendarId='primary', body=json_event).execute()
+    tmp = service.events().insert(calendarId='primary', body=json_event).execute()
 
 
-def main(): 
-    filename = "tasks.json"
+def calendar_connection(filename): 
     with open(filename, 'r') as f: 
         data = json.load(f)
 
-    service = init_mail_service()
+    company = Company("test", [Employee("alexandre.vockil@gmail.com", ["Swift", "C"]),
+        Employee("liardeaux.quentin@gmail.com", ["C++", "Java"])])
+    tasks = []
+    for value in data["tasks"]:
+        tasks.append(Task(value))
 
-    events = get_event(service, NOW.isoformat() + 'Z') 
-    company = Company("test", [Employee("test.test@test.com", ["Swift", "C"])])
-    company.employees[0].fill_day(events)
-    for elem in data["tasks"]:
-        company.employees[0].find_availability_for_task(Task(elem))
+    for employee in company.employees:
+        events = get_event(employee.service, NOW.isoformat() + 'Z') 
+        employee.fill_day(events)
 
-    for day in company.employees[0].days:
-        print(day.events)
-        for tmp in day.events:
-            if tmp.task:
-                create_event(service, tmp)
+        if len(tasks):
+            employee.find_availability_for_task(tasks[0])
+
+        for day in employee.days:
+            for event in day.events:
+                if event.task:
+                    del tasks[tasks.index(event.task)]
+                    create_event(employee.service, event)
   
 if __name__ == '__main__':
-    main()
+    calendar_connection("tasks.json")
