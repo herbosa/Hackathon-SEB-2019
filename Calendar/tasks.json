@@ -1,0 +1,14 @@
+{
+    "tasks": [
+        { "description":
+            { "name": "Reunion Projet info",
+              "time": 60,
+              "skills": ["Java", "Swift"]
+            },
+          "preferences":
+            { "days": ["Mon", "Tue"],
+              "attendees": ["Antoine.H"]
+            }
+        }
+    ]
+}
