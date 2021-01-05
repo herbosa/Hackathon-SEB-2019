@@ -9,7 +9,7 @@
   "dependencies": {
     "@ap.cx/react-fullpage": "^0.1.10-alpha",
     "@zeit/next-css": "^1.0.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "leaflet": "^1.4.0",
     "next": "^8.0.1",
     "pigeon-maps": "^0.11.10",
